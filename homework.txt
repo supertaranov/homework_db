@@ -1,25 +1,26 @@
+CREATE TABLE IF NOT EXISTS albumlist (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(40) NOT NULL,
+	releaseyear VARCHAR(4) INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS collection (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
-	ReleaseYear INTEGER NOT NULL
+	releaseyear VARCHAR(4) INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trackList (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
-	Duration TEXT NOT NULL,
-	album VARCHAR(40) NOT NULL
+	duration INTEGER NOT NULL,
+	album_id integer references albumlist(id)
 );
 	
 CREATE TABLE IF NOT EXISTS tracksandcollections (
-	id INTEGER PRIMARY KEY REFERENCES Collections(id),
+	id INTEGER PRIMARY KEY REFERENCES Collection(id),
 	id INTEGER PRIMARY KEY REFERENCES Tracklist(id)
-);
-
-CREATE TABLE IF NOT EXISTS albumlist (
-	id SERIAL PRIMARY KEY,
-	name VARCHAR(40) NOT NULL,
-	ReleaseYear INTEGER NOT NULL
+	CONSTRAINT pk PRIMARY KEY (collection_id, tracklist_id)
 );
 
 CREATE TABLE IF NOT EXISTS performersandalbums (
@@ -29,15 +30,16 @@ CREATE TABLE IF NOT EXISTS performersandalbums (
 
 CREATE TABLE IF NOT EXISTS listofperformers (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(40) NOT NULL
+	name VARCHAR(40) UNIQUE NOT NULL
 );
 	
 CREATE TABLE IF NOT EXISTS musicalgenres (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(40) NOT NULL
+	name VARCHAR(40) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS genresandperformers (
 	id INTEGER PRIMARY KEY REFERENCES musicalgenres(id),
 	id INTEGER PRIMARY KEY REFERENCES listofperformers(id)
+	CONSTRAINT pk PRIMARY KEY (musicalgenres_id, listofperformers_id)
 );
